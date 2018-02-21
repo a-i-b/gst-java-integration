@@ -1,0 +1,20 @@
+gstreamer:
+  pipesrc: ksvideosrc ! capsfilter caps=video/x-raw,width=640,height=480,framerate=30/1 ! videoconvert ! x264enc tune=zerolatency
+  piperec: appsrc name="appsrc" ! video/x-h264, codec_data=(buffer)017a001effe1001d677a001ebcd940a03db016a0c020a8000003000800000301e478b16cb001000568ebecb22c,stream-format=avc,width=640,height=480,framerate=30/1 ! queue
+  pipefilerec: appsrc name="appsrc" format=3 is-live=true do-timestamp=true ! video/x-h264,width=640,height=480,framerate=30/1 ! queue ! h264parse ! mp4mux ! filesink location="D:/gst/video.mp4"
+gst-row:  
+  pipesrc: ksvideosrc ! capsfilter caps=video/x-raw,width=640,height=480,framerate=30/1,format=YUY2 ! videoconvert 
+  piperec: appsrc name="appsrc" ! video/x-raw,width=640,height=480,framerate=30/1,format=YUY2 ! videoconvert ! jpegenc quality=95 
+rtp:  
+  piperec111: appsrc name="appsrc" ! video/x-h264,width=640,height=480,framerate=30/1,stream-format=avc ! avdec_h264 ! videoconvert ! jpegenc quality=95 
+  pipesrc: ksvideosrc ! capsfilter caps=video/x-raw,width=640,height=480,framerate=30/1 ! videoconvert ! x264enc bitrate=15000 byte-stream=true ! h264parse config-interval=1 ! rtph264pay pt=96 
+  piperec: appsrc name="appsrc" ! application/x-rtp,encoding-name=H264,payload=96 ! rtpjitterbuffer ! rtph264depay ! avdec_h264 ! videoconvert ! jpegenc quality=95 
+h264parsed:
+  pipesrc: ksvideosrc ! capsfilter caps=video/x-raw,width=640,height=480,framerate=30/1 ! videoconvert ! x264enc bitrate=15000 byte-stream=true ! h264parse config-interval=1  
+  piperec: appsrc name="appsrc" ! video/x-h264, codec_data=(buffer)017a001effe1001d677a001ebcd940a03db016a0c020a8000003000800000301e478b16cb001000568ebecb22c,stream-format=avc,width=640,height=480,framerate=30/1 ! avdec_h264 ! videoconvert ! jpegenc quality=95 
+h264_not_parsed:
+  pipesrc: ksvideosrc ! capsfilter caps=video/x-raw,width=640,height=480,framerate=30/1 ! videoconvert ! x264enc bitrate=15000 byte-stream=true  
+  piperec: appsrc name="appsrc" ! video/x-h264, codec_data=(buffer)017a001effe1001d677a001ebcd940a03db016a0c020a8000003000800000301e478b16cb001000568ebecb22c,stream-format=avc,width=640,height=480,framerate=30/1 ! avdec_h264 ! videoconvert ! jpegenc quality=95 
+
+  
+  

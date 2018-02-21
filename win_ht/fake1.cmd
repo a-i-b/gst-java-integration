@@ -1,0 +1,1 @@
+gst-launch-1.0 -v autovideosrc ! videoconvert ! capsfilter caps=video/x-raw,width=640,height=480 ! x264enc bitrate=15000 byte-stream=true ! h264parse config-interval=1 ! rtph264pay pt=96 ! queue ! fakesink

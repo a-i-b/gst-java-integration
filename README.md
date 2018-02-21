@@ -1,5 +1,5 @@
 # gst-java-integration
-Example of using gstreamer elements AppSinc and AppSrc in Java
+Example of using gstreamer elements AppSink and AppSrc in Java
 
 Producer and consumer components communicate over memory queue.
 

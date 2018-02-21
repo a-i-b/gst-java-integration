@@ -3,7 +3,7 @@ Example of using gstreamer elements AppSinc and AppSrc in Java
 
 Producer and consumer components communicate over memory queue.
 
-Some pipelines for various communication types are proveded.
+Some pipelines for various communication types are provided.
 
 Consumer supports two types of pipelines: 
 
